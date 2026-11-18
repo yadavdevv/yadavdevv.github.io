@@ -1,0 +1,18 @@
+<div class="widget mx wide reveal" id="mx" data-src="figures/data/lander_weights.json">
+  <div class="w-head">
+    <div><span class="w-kick">Explore the actual weights</span>
+      <div class="w-title">The lander pilot: all 4,867 numbers</div></div>
+    <div class="w-ctl"><span class="w-seg" role="group" aria-label="view"><button data-mode="before">Before</button><button data-mode="after">After</button><button data-mode="change" aria-pressed="true">Change</button></span></div>
+  </div>
+  <div class="mx-variants" role="group" aria-label="which edit"></div>
+  <div class="mx-grid">
+    <div class="mx-big"><div class="mx-lab">Layer 2 · 64 → 64 hidden units (+ bias)</div><canvas data-l="1"></canvas></div>
+    <div class="mx-strips">
+      <div><div class="mx-lab">Layer 1 · sensors → 64 units</div><canvas data-l="0"></canvas></div>
+      <div><div class="mx-lab">Layer 3 · 64 units → engines</div><canvas data-l="2"></canvas></div>
+      <div class="mx-count"><b></b><small></small></div>
+      <div class="mx-inspect">Hover any cell to read its value.</div>
+      <div class="mx-legend"><span>negative</span><i></i><span>positive</span></div>
+    </div>
+  </div>
+</div>

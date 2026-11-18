@@ -1,0 +1,15 @@
+<div class="widget race wide reveal" id="race" data-src="figures/data/qwen_race.json">
+  <div class="w-head">
+    <div><span class="w-kick">Recorded outputs · replayed on one clock</span>
+      <div class="w-title">Same problem, three models, a 32,768-token budget</div></div>
+    <div class="w-ctl"><button class="w-btn w-primary" data-act="play">▶ Play</button>
+      <span class="w-seg" role="group" aria-label="speed"><button data-sp="1" aria-pressed="true">1×</button><button data-sp="5">5×</button><button data-sp="25">25×</button></span>
+      <button class="w-btn" data-act="end">Skip to end</button></div>
+  </div>
+  <div class="race-pick w-seg" role="group" aria-label="problem"></div>
+  <div class="race-q"></div>
+  <div class="race-lanes"></div>
+  <p class="w-foot">GSM8K test problems 22 and 36, the exact answers from our 32k run (same prompt and sampling for all three). The clock is
+    shared: 1× plays 500 tokens a second, and text appears at the rate its tokens were written. Pause, or let it finish, to scroll back
+    through a whole answer.</p>
+</div>

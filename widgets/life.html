@@ -1,0 +1,22 @@
+<div class="widget life wide reveal" id="life">
+  <div class="w-head">
+    <div><span class="w-kick live">● Live · running in your browser</span>
+      <div class="w-title">Claude's 45-weight network, computing every cell</div></div>
+    <div class="w-ctl"><button class="w-btn w-primary" data-act="play">▶ Play</button><button class="w-btn" data-act="step">Step</button>
+      <button class="w-btn" data-act="gun">Glider gun</button><button class="w-btn" data-act="random">Random</button><button class="w-btn" data-act="clear">Clear</button></div>
+  </div>
+  <div class="life-main">
+    <div class="life-board"><canvas aria-label="Game of Life grid; click to draw"></canvas><div class="life-hint" hidden>The board is empty, and in Life an empty board stays empty forever.<br><b>Draw some cells</b>, or press <b>Glider gun</b> or <b>Random</b>.</div></div>
+    <div class="life-side">
+      <div class="life-gen">generation <b>0</b> · <span data-k="pop">0</span> live cells</div>
+      <div class="life-calc"><div class="lc-h">Hover a cell to see the network think</div>
+        <div class="lc-row"><span>live neighbours</span><b data-k="n">·</b></div>
+        <div class="lc-row"><span>cell itself</span><b data-k="c">·</b></div>
+        <div class="lc-row lc-s"><span>s = neighbours + ½ · cell</span><b data-k="s">·</b></div>
+        <div class="lc-relu"></div>
+        <div class="lc-row lc-out"><span>output → next tick</span><b data-k="o">·</b></div>
+      </div>
+      <p class="life-tip">Click or drag on the grid to draw. The whole rule is four hinges: 2·ReLU(s−2) − 2·ReLU(s−2.5) − 2·ReLU(s−3.5) + 2·ReLU(s−4).</p>
+    </div>
+  </div>
+</div>
