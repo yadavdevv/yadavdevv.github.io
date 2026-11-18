@@ -1,6 +1,6 @@
 """Build the article page from ../wsp-article/article.md.
 
-    .venv/bin/python build.py            -> wsp/index.html (+ figures copied)
+    .venv/bin/python build.py            -> blogs/wsp-exp/index.html (+ figures copied)
 
 Markdown with a few block directives (each starts with a line ':::name args' and ends with ':::'):
 
@@ -30,7 +30,7 @@ import markdown
 HERE = Path(__file__).parent
 SRC = HERE.parent / "wsp-article" / "article.md"
 REPO = HERE.parent / "wsp"
-OUT = HERE / "wsp"
+OUT = HERE / "blogs" / "wsp-exp"
 
 
 def inline(t):
@@ -298,7 +298,7 @@ def main():
     for k, v in {"title": meta["title"].replace("*", "").replace(" | ", " · "), "title_html": re.sub(r" \| (.+)$", r'<span class="h1-sub">\1</span>', re.sub(r"\*(.+?)\*", r'<span class="hl">\1</span>', meta["title"])), "subtitle": meta.get("subtitle", ""), "author": meta.get("author", ""),
                  "date": meta.get("date", ""), "minutes": str(minutes), "quick": str(quick), "toc": toc(body), "body": body}.items():
         page = page.replace("{{" + k + "}}", v)
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "index.html").write_text(page)
     shutil.copytree(SRC.parent / "figures", OUT / "figures", dirs_exist_ok=True)
     left = re.findall(r"DIRECTIVE\d+X|:::\w+", page)
