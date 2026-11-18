@@ -102,7 +102,7 @@ def d_meme(args, lines, n):
 
 
 def d_dial(args, lines, n):
-    d = REPO / "llm-edits/gemma/mood-dial"
+    d = REPO / "case12-mood-dial"
     ans = json.loads((d / "dial_answers.json").read_text()); tone = json.loads((d / "dial_tone_gemma_judge.json").read_text())
     show = json.loads((d / "dial_showcase.json").read_text())          # longer sampled answers and follow-ups (gen_showcase.py)
     ns = {}; exec((d / "prompts.py").read_text(), ns)
