@@ -97,7 +97,8 @@ figcaption, .cap { font: 400 14.5px/1.5 var(--sans); color: var(--ink2); max-wid
 .tab-panels { padding: 18px; }
 .tab-panel { display: none; text-align: center; }
 .tab-panel.on { display: block; animation: fadein .45s ease; }
-.tab-panel img { max-width: 100%; border-radius: 10px; }
+.tab-panel img, .tab-panel video { max-width: 100%; border-radius: 10px; display: block; margin: 0 auto; }
+.media { margin: 1.8em 0; text-align: center; } .media video { width: 100%; border-radius: 12px; display: block; }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* reasoning trace */
@@ -294,6 +295,8 @@ article { counter-reset: sn; }
 @media (max-width: 999px) { .sidenote { float: none; display: block; width: auto; margin: .5em 0 .8em; background: var(--tint); border: 0; border-radius: 10px; padding: 9px 13px; } }
 figure.photo.ph-side { float: right; clear: right; width: var(--side); margin: .3em calc(-1 * (var(--side) + var(--gap))) 1em 0; }
 figure.photo.ph-side .ph-cap { font-size: 13.5px; }
+figure.photo.ph-side .ph-frame img { height: 210px; object-fit: cover; object-position: 50% 40%; }
+@media (max-width: 999px) { figure.photo.ph-side .ph-frame img { height: auto; } }
 @media (max-width: 999px) { figure.photo.ph-side { float: none; width: auto; max-width: 380px; margin: 1.4em auto; } }
 
 /* deep dives (same shell as the explainers, different accent) */
@@ -340,7 +343,7 @@ details.explain:hover, details.deep:hover { border-color: color-mix(in srgb, var
 .race.playing .lane-txt { overflow: hidden; -webkit-mask: linear-gradient(transparent, #000 22%); mask: linear-gradient(transparent, #000 22%); }
 .race-pick { margin: 0 0 10px; flex-wrap: wrap; }
 .race-q b { font-style: normal; font-weight: 600; color: var(--ink); }
-.lane-mit .lane-bar i { background: var(--good); } .lane-base .lane-bar i, .lane-bias .lane-bar i { background: var(--accent-2); }
+.lane.done-ok .lane-bar i { background: var(--good); } .lane.done-bad .lane-bar i { background: var(--bad); }
 .lane.done-ok { border-color: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 18%, transparent); } .lane.done-ok .lane-st { color: var(--good); font-weight: 600; }
 .lane.done-bad { border-color: var(--bad); } .lane.done-bad .lane-st { color: var(--bad); font-weight: 600; }
 @media (max-width: 760px) { .race-lanes { grid-template-columns: 1fr; } .lane-txt { height: 160px; } }
@@ -490,7 +493,8 @@ footer { border-top: 1px solid var(--rule); margin-top: 4em; padding: 26px 0 70p
     const place = b => { ink.style.left = b.offsetLeft + "px"; ink.style.width = b.offsetWidth + "px"; };
     btns.forEach((b, i) => b.onclick = () => {
       btns.forEach(x => x.setAttribute("aria-selected", x === b)); pans.forEach((p, j) => p.classList.toggle("on", j === i));
-      const img = pans[i].querySelector("img[data-src]"); if (img) { img.src = img.dataset.src; img.removeAttribute("data-src"); }
+      const m = pans[i].querySelector("[data-src]"); if (m) { m.src = m.dataset.src; m.removeAttribute("data-src"); }
+      pans.forEach((p, j) => p.querySelectorAll("video").forEach(v => j === i ? v.play().catch(() => {}) : v.pause()));
       place(b);
     });
     requestAnimationFrame(() => place(btns[0])); addEventListener("resize", () => place(btns.find(b => b.getAttribute("aria-selected") === "true")));
@@ -559,7 +563,9 @@ footer { border-top: 1px solid var(--rule); margin-top: 4em; padding: 26px 0 70p
       }
       l.tk.textContent = fmt(T); l.bar.style.width = (100 * T / D.cap) + "%";
       l.el.classList.toggle("done-ok", done && l.a.correct); l.el.classList.toggle("done-bad", done && !l.a.correct);
-      l.st.textContent = done ? (l.a.correct ? "✓ answered " + P.unit.replace("{}", +l.a.pred) + ", correct" : "✗ out of tokens, no answer") : tok > 0 ? "thinking…" : "ready";
+      const ans = () => P.unit.replace("{}", (+l.a.pred).toLocaleString("en"));
+      l.st.textContent = !done ? (tok > 0 ? "thinking…" : "ready") : ({ correct: "✓ answered " + ans() + ", correct", cap: "✗ out of tokens, no answer",
+        blank: "✗ blank space, no answer", none: "✗ stopped without a final answer", wrong: "✗ answered " + ans() + ", wrong" })[l.a.outcome];
       race.classList.toggle("playing", playing);
     });
     const frame = t => {
@@ -576,7 +582,7 @@ footer { border-top: 1px solid var(--rule); margin-top: 4em; padding: 26px 0 70p
       race.querySelectorAll("[data-sp]").forEach(x => x.setAttribute("aria-pressed", x === b)); });
     const pick = race.querySelector(".race-pick");
     D.problems.forEach((p, i) => { const b = document.createElement("button"); b.setAttribute("aria-pressed", i === 0);
-      b.textContent = (i === 0 ? "Problem 22 · both fix it" : "Problem 36 · only the edit fixes it");
+      b.textContent = p.pick;
       b.onclick = () => { pick.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); load(p); }; pick.appendChild(b); });
     load(D.problems[0]);
     if (/static/.test(location.search)) { tok = 1911; draw(); } else seen(race, () => { if (!playing && tok === 0) play(); });
@@ -618,9 +624,11 @@ footer { border-top: 1px solid var(--rule); margin-top: 4em; padding: 26px 0 70p
         const g = c.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, v.rows * ch);
         for (let r = 0; r < v.rows; r++) for (let q = 0; q < v.cols; q++) {
           const [i, j] = v.at(r, q), b0 = base[l][i][j], a1 = after[l][i][j];
-          const t = mode === "before" ? b0 / scale[l] : mode === "after" ? a1 / scale[l] : (a1 === b0 ? 0 : (a1 - b0) / dmax);
-          g.fillStyle = mode === "change" && a1 === b0 ? colour(.07 * b0 / scale[l], mid) : colour(t, mid);
+          // Change view: untouched weights are flat neutral; every changed weight is strongly coloured (at least 55%) and outlined
+          const d = (a1 - b0) / dmax, t = mode === "before" ? b0 / scale[l] : mode === "after" ? a1 / scale[l] : Math.sign(d) * Math.max(.55, Math.abs(d));
+          g.fillStyle = mode === "change" && a1 === b0 ? `rgb(${mid.join(",")})` : colour(t, mid);
           g.fillRect(lab + q * cw, r * ch, Math.ceil(cw), Math.ceil(ch));
+          if (mode === "change" && a1 !== b0 && cw >= 4) { g.strokeStyle = "rgba(0,0,0,.35)"; g.lineWidth = 1; g.strokeRect(lab + q * cw + .5, r * ch + .5, cw - 1, ch - 1); }
         }
         if (v.rlab) { g.fillStyle = ink; g.font = "11px " + css("--sans"); g.textBaseline = "middle";
           for (let r = 0; r < v.rows; r++) g.fillText(v.rlab(r), 0, r * ch + ch / 2); }

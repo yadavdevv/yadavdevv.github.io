@@ -51,7 +51,9 @@ def d_tabs(args, lines, n):
     for i, (lab, src, *cap) in enumerate(tabs):
         attr = f'src="{src}"' if i == 0 else f'data-src="{src}"'
         cap_html = f'<p class="cap">{inline(cap[0])}</p>' if cap and cap[0] else ""
-        pan += f'<div class="tab-panel{" on" if i == 0 else ""}" role="tabpanel"><img {attr} alt="{html.escape(lab)}">{cap_html}</div>'
+        media = (f'<video {attr} autoplay muted loop playsinline aria-label="{html.escape(lab)}"></video>' if src.endswith(".mp4")
+                 else f'<img {attr} alt="{html.escape(lab)}">')
+        pan += f'<div class="tab-panel{" on" if i == 0 else ""}" role="tabpanel">{media}{cap_html}</div>'
     return f'<div class="tabs wide reveal"><div class="tab-bar" role="tablist">{btn}<span class="tab-ink"></span></div><div class="tab-panels">{pan}</div></div>'
 
 
