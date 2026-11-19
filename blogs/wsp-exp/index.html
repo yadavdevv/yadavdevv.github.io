@@ -445,13 +445,13 @@ footer { border-top: 1px solid var(--rule); margin-top: 4em; padding: 26px 0 70p
   <header class="hero">
     <h1>Inside the <span class="hl">Weights</span>: Rewiring Models Without Training<span class="h1-sub">Experiments in Weight-Space Programming</span></h1>
     <p class="subtitle">Claude reads the weights, works out what to change, and writes the change directly. From a tic-tac-toe player to a language model's mood.</p>
-    <div class="meta"><span class="pill">Devesh Yadav</span><span>November 2026</span><span class="w-seg readmode" role="group" aria-label="reading mode"><button data-read="quick" aria-pressed="true">Quick read · 18 min</button><button data-read="full">Full, every deep dive · 37 min</button></span>
+    <div class="meta"><span class="pill">Devesh Yadav</span><span>18 November 2026</span><span class="w-seg readmode" role="group" aria-label="reading mode"><button data-read="quick" aria-pressed="true">Quick read · 18 min</button><button data-read="full">Full, every deep dive · 37 min</button></span>
       <a class="pill" href="https://github.com/yadavdevv/wsp-exp">Code &amp; data ↗</a></div>
     <div class="wgrid" id="wgrid" aria-hidden="true"></div>
     <div class="wgrid-cap">A weight matrix. Training nudges every cell a little; in this article, a model picks the cells and changes them.</div>
   </header>
   <article>
-<p class="tldr reveal"><strong>TL;DR.</strong> I asked a frontier model (Claude) to change neural networks by <strong>writing their weights directly</strong>: no
+<p class="tldr reveal"><strong>TL;DR.</strong> I asked a frontier model (Claude Opus 5.5) to change neural networks by <strong>writing their weights directly</strong>: no
 training, just reasoning about what the numbers do. In twelve small cases it wrote working
 networks from scratch, patched trained controllers after they broke, and edited small language models. It also failed in
 instructive ways. The pattern behind both: <strong>networks learn the cases they saw, not the rule behind them.</strong> Edits that
